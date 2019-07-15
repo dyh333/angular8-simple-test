@@ -1,21 +1,61 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
+<ul nz-menu [nzMode]="'inline'" style="width: 240px;">
+  <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menus }"></ng-container>
+  <ng-template #menuTpl let-menus>
+    <ng-container *ngFor="let menu of menus">
+      <li
+        nz-menu-item
+        [nzPaddingLeft]="menu.level * 24"
+        *ngIf="!menu.children"
+        [nzDisabled]="menu.disabled"
+        [nzSelected]="menu.selected"
+      >
+        <span title>
+          <i nz-icon [type]="menu.icon" *ngIf="menu.icon"></i>
+          <span>{{ menu.title }}</span>
+        </span>
+      </li>
+      <li
+        nz-submenu
+        [nzPaddingLeft]="menu.level * 24"
+        *ngIf="menu.children"
+        [nzOpen]="menu.open"
+        [nzDisabled]="menu.disabled"
+      >
+        <span title>
+          <i nz-icon [type]="menu.icon" *ngIf="menu.icon"></i>
+          <span>{{ menu.title }}</span>
+        </span>
+        <ul>
+          <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"></ng-container>
+        </ul>
+      </li>
+    </ng-container>
+  </ng-template>
 </ul>
 
-<router-outlet></router-outlet>
+
+<button nz-button nzType="primary" (click)="onSelectChange()">Primary</button>
+
+
+<nz-timeline>
+  <nz-timeline-item>Create a services site 2015-09-01</nz-timeline-item>
+  <nz-timeline-item>Solve initial network problems 2015-09-01</nz-timeline-item>
+  <nz-timeline-item
+    nzColor="red"
+    [nzDot]="status === 0 ? dotTemplate : dotTemplate2"
+    >Technical testing 2015-09-01</nz-timeline-item
+  >
+  <!-- <nz-timeline-item nzColor="red" [nzDot]="dotTemplate2"
+    >Technical testing 2015-09-01</nz-timeline-item
+  > -->
+  <nz-timeline-item>Network problems being solved 2015-09-01</nz-timeline-item>
+</nz-timeline>
+<ng-template #dotTemplate>
+  <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
+</ng-template>
+<ng-template #dotTemplate2>
+  <i nz-icon nzType="menu-fold" style="font-size: 16px;"></i>
+</ng-template>
+<button nz-button nzType="primary" (click)="onTimelineChange()">
+  TimelineChange
+</button>
