@@ -3,13 +3,13 @@
   <ng-template #menuTpl let-menus>
     <ng-container *ngFor="let menu of menus">
       <li
-        nz-menu-item
+        nz-menu-item nzMatchRouter
         [nzPaddingLeft]="menu.level * 24"
         *ngIf="!menu.children"
         [nzDisabled]="menu.disabled"
         [nzSelected]="menu.selected"
       >
-        <span title>
+        <span title [routerLink]="menu.link">
           <i nz-icon [type]="menu.icon" *ngIf="menu.icon"></i>
           <span>{{ menu.title }}</span>
         </span>
@@ -34,28 +34,17 @@
 </ul>
 
 
-<button nz-button nzType="primary" (click)="onSelectChange()">Primary</button>
+<button nz-button nzType="primary" (click)="onSelectChange()">click me</button>
 
 
-<nz-timeline>
-  <nz-timeline-item>Create a services site 2015-09-01</nz-timeline-item>
-  <nz-timeline-item>Solve initial network problems 2015-09-01</nz-timeline-item>
-  <nz-timeline-item
-    nzColor="red"
-    [nzDot]="status === 0 ? dotTemplate : dotTemplate2"
-    >Technical testing 2015-09-01</nz-timeline-item
-  >
-  <!-- <nz-timeline-item nzColor="red" [nzDot]="dotTemplate2"
-    >Technical testing 2015-09-01</nz-timeline-item
-  > -->
-  <nz-timeline-item>Network problems being solved 2015-09-01</nz-timeline-item>
-</nz-timeline>
-<ng-template #dotTemplate>
-  <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
-</ng-template>
-<ng-template #dotTemplate2>
-  <i nz-icon nzType="menu-fold" style="font-size: 16px;"></i>
-</ng-template>
-<button nz-button nzType="primary" (click)="onTimelineChange()">
-  TimelineChange
-</button>
+
+<!-- <ul nz-menu nzMode="horizontal">
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/my-module1']">English Menu Document</a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/my-module2']">Chinese Menu Document</a>
+  </li>
+</ul> -->
+
+<router-outlet></router-outlet>

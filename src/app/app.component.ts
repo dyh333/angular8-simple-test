@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,88 +12,43 @@ export class AppComponent {
   menus = [
     {
       level: 1,
-      title: 'Mail Group',
-      icon: 'mail',
-      open: true,
+      title: '告警管理',
       selected: false,
-      disabled: false,
+      expanded: false,
       children: [
         {
           level: 2,
-          title: 'Group 1',
-          icon: 'bars',
-          open: false,
+          title: '告警历史',
           selected: false,
-          disabled: false,
-          children: [
-            {
-              level: 3,
-              title: 'Option 1',
-              selected: false,
-              disabled: false
-            },
-            {
-              level: 3,
-              title: 'Option 2',
-              selected: false,
-              disabled: true
-            }
-          ]
+          expanded: false,
+          link: '/my-module1'
         },
         {
           level: 2,
-          title: 'Group 2',
-          icon: 'bars',
-          selected: true,
-          disabled: false
-        },
-        {
-          level: 2,
-          title: 'Group 3',
-          icon: 'bars',
+          title: '策略管理',
           selected: false,
-          disabled: false
-        }
-      ]
-    },
-    {
-      level: 1,
-      title: 'Team Group',
-      icon: 'team',
-      open: false,
-      selected: false,
-      disabled: false,
-      children: [
-        {
-          level: 2,
-          title: 'User 1',
-          icon: 'user',
-          selected: false,
-          disabled: false
-        },
-        {
-          level: 2,
-          title: 'User 2',
-          icon: 'user',
-          selected: false,
-          disabled: false
+          expanded: false,
+          link: '/my-module2'
         }
       ]
     }
   ];
 
-  status=0;
+  status = 0;
 
 
-  onSelectChange() {
-    this.menus[0].children[1].selected = false;
-    this.menus[0].children[2].selected = true;
+  constructor(private router: Router) {}
 
-    console.log(this.menus);
+  activedMenu(event) {
+    console.log(event);
   }
 
-  onTimelineChange() {
-    // TODO: change dotTemplate to dotTemplate2
-    this.status = 1;
+  onSelectChange() {
+    // this.menus[0].children[0].selected = false;
+    // this.menus[0].children[1].selected = true;
+
+    // console.log(this.menus);
+
+    this.router.navigate(['./my-module1']);
   }
 }
