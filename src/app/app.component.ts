@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import Rxmq from 'rxmq';
 
 @Component({
   selector: 'app-root',
@@ -6,93 +7,25 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  mode = false;
-  dark = false;
-  menus = [
-    {
-      level: 1,
-      title: 'Mail Group',
-      icon: 'mail',
-      open: true,
-      selected: false,
-      disabled: false,
-      children: [
-        {
-          level: 2,
-          title: 'Group 1',
-          icon: 'bars',
-          open: false,
-          selected: false,
-          disabled: false,
-          children: [
-            {
-              level: 3,
-              title: 'Option 1',
-              selected: false,
-              disabled: false
-            },
-            {
-              level: 3,
-              title: 'Option 2',
-              selected: false,
-              disabled: true
-            }
-          ]
+  constructor() {
+    const subscription = Rxmq.channel('posts')
+      .observe('post.add')
+      .subscribe(
+        // following methods are same as for Rx.Observable.subscribe
+        data => {
+          // handle new data ...
+          console.log(data);
         },
-        {
-          level: 2,
-          title: 'Group 2',
-          icon: 'bars',
-          selected: true,
-          disabled: false
-        },
-        {
-          level: 2,
-          title: 'Group 3',
-          icon: 'bars',
-          selected: false,
-          disabled: false
+        error => {
+          // handle error ...
         }
-      ]
-    },
-    {
-      level: 1,
-      title: 'Team Group',
-      icon: 'team',
-      open: false,
-      selected: false,
-      disabled: false,
-      children: [
-        {
-          level: 2,
-          title: 'User 1',
-          icon: 'user',
-          selected: false,
-          disabled: false
-        },
-        {
-          level: 2,
-          title: 'User 2',
-          icon: 'user',
-          selected: false,
-          disabled: false
-        }
-      ]
-    }
-  ];
+      );
 
-  status=0;
-
-
-  onSelectChange() {
-    this.menus[0].children[1].selected = false;
-    this.menus[0].children[2].selected = true;
-
-    console.log(this.menus);
-  }
-
-  onTimelineChange() {
-    // TODO: change dotTemplate to dotTemplate2
-    this.status = 1;
+    Rxmq.channel('posts')
+      .subject('post.add')
+      .next({
+        title: 'Woo-hoo, first post!',
+        text: 'My lengthy post here'
+      });
   }
 }
