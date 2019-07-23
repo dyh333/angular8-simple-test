@@ -1,16 +1,8 @@
-<nz-table #headerTable [nzSize]="'small'" [nzData]="listOfData" [nzPageSize]="50" [nzScroll]="{ y: '240px' }">
-  <thead>
-    <tr>
-      <th nzWidth="150px">Name</th>
-      <th nzWidth="150px">Age</th>
-      <th>Address</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of headerTable.data">
-      <td>{{ data.name }}</td>
-      <td>{{ data.age }}</td>
-      <td>{{ data.address }}</td>
-    </tr>
-  </tbody>
-</nz-table>
+<nz-breadcrumb [nzAutoGenerate]="true"></nz-breadcrumb>
+
+<nz-divider></nz-divider>
+
+<router-outlet></router-outlet>
+See the first: <a [routerLink]="'apple'">Apple</a><br>
+See the second: <a [routerLink]="'apple/steve'">Steve</a><br>
+See the third: <a [routerLink]="'apple/steve/jobs'">Jobs</a><br>
