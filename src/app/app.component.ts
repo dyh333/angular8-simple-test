@@ -1,6 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-// import {jsonTree} from 'json-tree-viewer';
-declare var jsonTree: any;
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,26 +6,93 @@ declare var jsonTree: any;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild('wrapper', {static: false}) wrapper;
+  mode = false;
+  dark = false;
+  menus = [
+    {
+      level: 1,
+      title: 'Mail Group',
+      icon: 'mail',
+      open: true,
+      selected: false,
+      disabled: false,
+      children: [
+        {
+          level: 2,
+          title: 'Group 1',
+          icon: 'bars',
+          open: false,
+          selected: false,
+          disabled: false,
+          children: [
+            {
+              level: 3,
+              title: 'Option 1',
+              selected: false,
+              disabled: false
+            },
+            {
+              level: 3,
+              title: 'Option 2',
+              selected: false,
+              disabled: true
+            }
+          ]
+        },
+        {
+          level: 2,
+          title: 'Group 2',
+          icon: 'bars',
+          selected: true,
+          disabled: false
+        },
+        {
+          level: 2,
+          title: 'Group 3',
+          icon: 'bars',
+          selected: false,
+          disabled: false
+        }
+      ]
+    },
+    {
+      level: 1,
+      title: 'Team Group',
+      icon: 'team',
+      open: false,
+      selected: false,
+      disabled: false,
+      children: [
+        {
+          level: 2,
+          title: 'User 1',
+          icon: 'user',
+          selected: false,
+          disabled: false
+        },
+        {
+          level: 2,
+          title: 'User 2',
+          icon: 'user',
+          selected: false,
+          disabled: false
+        }
+      ]
+    }
+  ];
 
-  constructor() {}
+  status=0;
 
-  ngAfterViewInit(): void {
-    // Get DOM-element for inserting json-tree
-    // const wrapper = document.getElementById('wrapper');
 
-    console.log(this.wrapper.nativeElement);
+  onSelectChange() {
+    this.menus[0].children[1].selected = false;
+    this.menus[0].children[2].selected = true;
 
-    const dataStr =
-      '{ "firstName": "Jonh", "lastName": "Smith", "phones": ["123-45-67", "987-65-43"]}';
-    const data = JSON.parse(dataStr);
+    console.log(this.menus);
+  }
 
-    // Create json-tree
-    const tree = jsonTree.create(data, this.wrapper.nativeElement);
-
-    // Expand all (or selected) child nodes of root (optional)
-    tree.expand(node => {
-      return node.childNodes.length < 2 || node.label === 'phoneNumbers';
-    });
+  onTimelineChange() {
+    // TODO: change dotTemplate to dotTemplate2
+    this.status = 1;
   }
 }
