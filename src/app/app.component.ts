@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import Rxmq from 'rxmq';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +7,9 @@ import Rxmq from 'rxmq';
 })
 export class AppComponent {
   constructor() {
-    const subscription = Rxmq.channel('posts')
+    const myRxmq = new Rxmq();
+
+    const subscription = myRxmq.channel('posts')
       .observe('post.add')
       .subscribe(
         // following methods are same as for Rx.Observable.subscribe
@@ -21,7 +22,8 @@ export class AppComponent {
         }
       );
 
-    Rxmq.channel('posts')
+      // tslint:disable-next-line: align
+      Rxmq.channel('posts')
       .subject('post.add')
       .next({
         title: 'Woo-hoo, first post!',
