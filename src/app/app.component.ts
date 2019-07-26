@@ -1,98 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import * as SockJS from 'sockjs-client';
+import { Client, Message, over, StompSubscription } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  mode = false;
-  dark = false;
-  menus = [
-    {
-      level: 1,
-      title: 'Mail Group',
-      icon: 'mail',
-      open: true,
-      selected: false,
-      disabled: false,
-      children: [
-        {
-          level: 2,
-          title: 'Group 1',
-          icon: 'bars',
-          open: false,
-          selected: false,
-          disabled: false,
-          children: [
-            {
-              level: 3,
-              title: 'Option 1',
-              selected: false,
-              disabled: false
-            },
-            {
-              level: 3,
-              title: 'Option 2',
-              selected: false,
-              disabled: true
-            }
-          ]
-        },
-        {
-          level: 2,
-          title: 'Group 2',
-          icon: 'bars',
-          selected: true,
-          disabled: false
-        },
-        {
-          level: 2,
-          title: 'Group 3',
-          icon: 'bars',
-          selected: false,
-          disabled: false
-        }
-      ]
-    },
-    {
-      level: 1,
-      title: 'Team Group',
-      icon: 'team',
-      open: false,
-      selected: false,
-      disabled: false,
-      children: [
-        {
-          level: 2,
-          title: 'User 1',
-          icon: 'user',
-          selected: false,
-          disabled: false
-        },
-        {
-          level: 2,
-          title: 'User 2',
-          icon: 'user',
-          selected: false,
-          disabled: false
-        }
-      ]
-    }
-  ];
+export class AppComponent implements OnInit {
+  stompClient = null;
+  // gateway网关的地址
+  host = 'http://10.139.8.172:9007';
 
-  status=0;
-
-
-  onSelectChange() {
-    this.menus[0].children[1].selected = false;
-    this.menus[0].children[2].selected = true;
-
-    console.log(this.menus);
+  ngOnInit(): void {
+    this.connect();
   }
 
-  onTimelineChange() {
-    // TODO: change dotTemplate to dotTemplate2
-    this.status = 1;
+  setConnected(connected) {
+    // document.getElementById('connect').disabled = connected;
+    // document.getElementById('disconnect').disabled = !connected;
+    // document.getElementById('conversationDiv').style.visibility = connected
+    //   ? 'visible'
+    //   : 'hidden';
+    // $('#response').html();
+  }
+
+  connect() {
+    // 地址+端点路径，构建websocket链接地址
+    const socket = new SockJS(this.host + '/cluster');
+    this.stompClient = over(socket);
+    this.stompClient.connect({}, (frame) => {
+      this.setConnected(true);
+      console.log('Connected:' + frame);
+      // 监听的路径以及回调
+      this.stompClient.subscribe('/clustermonitor/checkinfo', response => {
+        this.showResponse(response.body);
+      });
+    });
+  }
+
+  disconnect() {
+    if (this.stompClient != null) {
+      this.stompClient.disconnect();
+    }
+    this.setConnected(false);
+    console.log('Disconnected');
+  }
+  send() {
+    const name = 'aaa';
+    const message = 'bbb';
+    // 发送消息的路径
+    this.stompClient.send(
+      '/request',
+      {},
+      JSON.stringify({ username: name, message })
+    );
+  }
+
+  showResponse(message) {
+    // const response = $('#response');
+    // response.html(message);
+    console.log(message);
   }
 }
