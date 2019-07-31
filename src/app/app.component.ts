@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NzDrawerRef, NzDrawerService } from 'ng-zorro-antd';
+import {MyComponentComponent} from './my-component/my-component.component';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +10,20 @@ import { Component } from '@angular/core';
 export class AppComponent {
   listOfData: any[] = [];
 
+  constructor(private drawerService: NzDrawerService) {}
+
+
   ngOnInit(): void {
-    for (let i = 0; i < 100; i++) {
-      this.listOfData.push({
-        name: `Edward King ${i}`,
-        age: 32,
-        address: `London, Park Lane no. ${i}`
+    const drawerRef = this.drawerService.create({
+      nzTitle: 'Template',
+      nzContent: MyComponentComponent,
+    });
+  }
+
+  openComponent() {
+    const drawerRef = this.drawerService.create({
+        nzTitle: 'Template',
+        nzContent: MyComponentComponent,
       });
-    }
   }
 }
