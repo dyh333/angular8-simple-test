@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 
   connect() {
     // 地址+端点路径，构建websocket链接地址
-    const socket = new SockJS(this.host + '/cluster');
+    const socket = new SockJS(this.host + '/cluster/check');
     this.stompClient = over(socket);
     this.stompClient.connect({}, (frame) => {
       this.setConnected(true);
