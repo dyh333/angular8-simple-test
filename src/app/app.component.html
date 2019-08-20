@@ -1,16 +1,61 @@
-<nz-table #headerTable [nzSize]="'small'" [nzData]="listOfData" [nzPageSize]="50" [nzScroll]="{ y: '240px' }">
+<nz-table #fixedTable [nzData]="listOfData" [nzSize]="'small'" [nzScroll]="{ x: '2196px', y: '240px' }">
   <thead>
     <tr>
-      <th nzWidth="150px">Name</th>
-      <th nzWidth="150px">Age</th>
-      <th>Address</th>
+        <th
+        [nzLeft]="'0px'"
+        [nzWidth]="'48px'"
+        nzShowCheckbox
+      >
+      </th>
+
+      <th nzWidth="150px" nzLeft="48px">Full Name</th>
+      <th nzWidth="100px" nzLeft="196px">Age</th>
+      <th nzWidth="100px">Column 1</th>
+      <th nzWidth="100px">Column 2</th>
+      <th nzWidth="100px">Column 3</th>
+      <th nzWidth="100px">Column 4</th>
+      <th nzWidth="100px">Column 5</th>
+      <th nzWidth="100px">Column 6</th>
+      <th nzWidth="100px">Column 7</th>
+      <th nzWidth="100px">Column 8</th>
+      <th nzWidth="100px">Column 1</th>
+      <th nzWidth="100px">Column 2</th>
+      <th nzWidth="100px">Column 3</th>
+      <th nzWidth="100px">Column 4</th>
+      <th nzWidth="100px">Column 5</th>
+      <th nzWidth="100px">Column 6</th>
+      <th nzWidth="100px">Column 7</th>
+      <th nzWidth="100px">Column 8</th>
+      <th nzWidth="100px" >Action</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of headerTable.data">
-      <td>{{ data.name }}</td>
-      <td>{{ data.age }}</td>
+    <tr *ngFor="let data of fixedTable.data">
+        <td
+        [nzLeft]="'0px'"
+        nzShowCheckbox>
+      </td>
+      <td nzLeft="48px">{{ data.name }}</td>
+      <td nzLeft="196px">{{ data.age }}</td>
       <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.address }}</td>
+      <td>
+        <a>action</a>
+      </td>
     </tr>
   </tbody>
 </nz-table>
