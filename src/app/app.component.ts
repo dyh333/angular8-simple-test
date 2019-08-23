@@ -8,6 +8,7 @@ import Vis from 'vis';
 })
 export class AppComponent implements OnInit {
   @ViewChild('wrapper', { static: true }) wrapper;
+  @ViewChild('tooltips', { static: true }) tooltips;
   NODE_ID = 0;
   getRelationRequestId = null;
   fullScreen = false;
@@ -66,31 +67,28 @@ export class AppComponent implements OnInit {
   };
 
   ngOnInit() {
-    console.log(123);
-    console.log(this.wrapper.nativeElement);
+    // const data = [
+    //   { id: 1, content: 'item 1', start: '2013-04-20' },
+    //   { id: 2, content: 'item 2', start: '2013-04-14' },
+    //   { id: 3, content: 'item 3', start: '2013-04-18' },
+    //   { id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19' },
+    //   { id: 5, content: 'item 5', start: '2013-04-25' },
+    //   { id: 6, content: 'item 6', start: '2013-04-27' }
+    // ];
+    // const options = {};
+    // const timeline = new Vis.Timeline(
+    //   this.wrapper.nativeElement,
+    //   data,
+    //   options
+    // );
 
-    const data = [
-      { id: 1, content: 'item 1', start: '2013-04-20' },
-      { id: 2, content: 'item 2', start: '2013-04-14' },
-      { id: 3, content: 'item 3', start: '2013-04-18' },
-      { id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19' },
-      { id: 5, content: 'item 5', start: '2013-04-25' },
-      { id: 6, content: 'item 6', start: '2013-04-27' }
-    ];
-    const options = {};
-    const timeline = new Vis.Timeline(
-      this.wrapper.nativeElement,
-      data,
-      options
-    );
+    this.getRelation('objId', 'bk_inst_id').then(res => {
+      const [rootData] = res;
 
-    // this.getRelation('objId', 'bk_inst_id').then(res => {
-    //   const [rootData] = res;
-
-    //   const validRelation = rootData.next.filter(
-    //     next => !this.ignore.includes(next.bk_obj_id)
-    //   );
-    // });
+      // const validRelation = rootData.next.filter(
+      //   next => !this.ignore.includes(next.bk_obj_id)
+      // );
+    });
   }
 
   resetNetwork(node = null) {
@@ -103,21 +101,22 @@ export class AppComponent implements OnInit {
       },
       this.options
     );
-    // this.network.on('selectNode', data => {
-    //   this.handleSelectNode(data.nodes[0]);
-    // });
-    // this.network.on('hoverNode', data => {
-    //   this.handleHoverNode(data);
-    // });
-    // this.network.on('blurNode', data => {
-    //   this.handleBlurNode(data);
-    // });
-    // this.network.on('dragStart', data => {
-    //   this.handleDragStart(data);
-    // });
+    this.network.on('selectNode', data => {
+      this.handleSelectNode(data.nodes[0]);
+    });
+    this.network.on('hoverNode', data => {
+      this.handleHoverNode(data);
+    });
+    this.network.on('blurNode', data => {
+      this.handleBlurNode(data);
+    });
+    this.network.on('dragStart', data => {
+      this.handleDragStart(data);
+    });
     node = node || this.nodes[0];
     this.network.focus(node.id, { scale: 0.8 });
     this.network.selectNodes([node.id]);
+
     this.legends = node.legends;
   }
 
@@ -390,5 +389,95 @@ export class AppComponent implements OnInit {
     </svg>`;
     canvas = null;
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  }
+
+  async handleSelectNode(id) {
+    const node = this.nodes.find(node => node.id === id);
+    if (!node.loaded) {
+      this.hoverNode = null;
+      const data = node.data;
+      await this.getRelation(data.bk_obj_id, data.bk_inst_id, node);
+      node.loaded = true;
+    } else {
+      this.legends = node.legends;
+    }
+  }
+
+  handleHoverNode(data) {
+    this.wrapper.nativeElement.style.cursor = 'pointer';
+    clearTimeout(this.hoverTimer);
+    this.popupTooltips(data);
+  }
+
+  handleBlurNode(data) {
+    this.wrapper.nativeElement.style.cursor = 'default';
+    this.hoverTimer = setTimeout(() => {
+      this.hoverNode = null;
+    }, 300);
+  }
+
+  handleDragStart(data) {
+    this.hoverNode = null;
+  }
+
+  handleTooltipsOver() {
+    clearTimeout(this.hoverTimer);
+  }
+
+  handleTooltipsLeave() {
+    this.hoverTimer = setTimeout(() => {
+      this.hoverNode = null;
+    }, 300);
+  }
+
+  popupTooltips(data) {
+    const nodeId = data.node;
+    this.hoverNode = this.nodes.find(node => node.id === nodeId);
+
+    // setTimeout(() => {
+    const view = this.network.getViewPosition();
+    const scale = this.network.getScale();
+    const nodeBox = this.network.getBoundingBox(nodeId);
+    const containerBox = this.wrapper.nativeElement.getBoundingClientRect();
+
+    const left = containerBox.width / 2 + (nodeBox.right - view.x) * scale;
+    const top = containerBox.height / 2 + (nodeBox.top - view.y) * scale;
+
+    this.tooltips.nativeElement.style.left = left + 'px';
+    this.tooltips.nativeElement.style.top = top + 'px';
+    // }, 0);
+  }
+
+  handleToggleNodeVisibility(legend) {
+    ['prev', 'next'].forEach(type => {
+      legend.node[type].forEach(node => {
+        const nodeLevel = legend.node.level;
+        const level =
+          nodeLevel === 0
+            ? [-1, 1]
+            : [nodeLevel > 0 ? nodeLevel + 1 : nodeLevel - 1];
+        if (level.includes(node.level) && node.data.bk_obj_id === legend.id) {
+          node.hidden = legend.active;
+        }
+      });
+    });
+    legend.active = !legend.active;
+    this.resetNetwork(legend.node);
+  }
+
+  handleShowDetails() {
+    const nodeData = this.hoverNode.data;
+    this.details.objId = nodeData.bk_obj_id;
+    this.details.instId = nodeData.bk_inst_id;
+    this.details.title = `${nodeData.bk_obj_name}-${nodeData.bk_inst_name}`;
+    this.details.show = true;
+  }
+
+  toggleFullScreen(fullScreen) {
+    // this.fullScreen = fullScreen;
+    // this.$nextTick(() => {
+    //   this.network.redraw();
+    //   this.network.moveTo({ scale: 0.8 });
+    // });
   }
 }

@@ -1,4 +1,31 @@
-asfdadfasdf
+<div class="relation-topology-layout" ngClass="{ 'full-screen': fullScreen }">
+  <div #wrapper style="height: 100vh;"></div>
 
-<div #wrapper style="height: 100vh;"></div>
+  <ul class="topology-legend">
+    <li
+      class="legend-item"
+      *ngFor="let legend of legends"
+      ngClass="{ inactive: !legend.active }"
+      (click)="handleToggleNodeVisibility(legend)"
+    >
+      <i ngClass="legend.icon"></i>
+      {{ legend.name }} {{ legend.count }}
+    </li>
+  </ul>
 
+  <div
+    #tooltips
+    class="topology-tooltips"
+    [ngStyle]="{'display': hoverNode ? 'block' : 'none'}"
+    (mouseover)="handleTooltipsOver()"
+    (mouseleave)="handleTooltipsLeave()"
+  >
+    <a
+      class="tooltips-option"
+      href="javascript:void(0)"
+      (click)="handleShowDetails()"
+    >
+      详情信息
+    </a>
+  </div>
+</div>

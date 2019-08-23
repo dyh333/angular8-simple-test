@@ -1,0 +1,75 @@
+.relation-topology-layout {
+  height: calc(100% - 64px);
+  background-color: #f9f9f9;
+  position: relative;
+  &.full-screen {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      .exit-full-screen {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          z-index: 9999;
+      }
+  }
+  .tolology-loading {
+      height: 100%;
+  }
+  .topology-container {
+      height: 100%;
+  }
+  .topology-legend {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      font-size: 14px;
+      background-color: #f9f9f9;
+      .legend-item {
+          margin: 0 0 5px 0;
+          cursor: pointer;
+          &.inactive {
+              color: #c3cdd7;
+          }
+      }
+  }
+  .topology-tooltips {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #fff;
+      font-size: 12px;
+      line-height: 22px;
+      padding: 2px 8px;
+      border-radius: 2px;
+      border: 1px solid #b0becc;
+      text-align: center;
+      &::before {
+          content: '';
+          background: url('/assets/images/tip.png');
+          width: 6px;
+          height: 10px;
+          position: absolute;
+          display: inline-block;
+          left: -6px;
+          top: 12px;
+          transform: translate(0, -50%);
+      }
+      .tooltips-option {
+          display: block;
+          white-space: nowrap;
+          &:hover {
+              color: #3c96ff;
+          }
+          &.tooltips-option-delete {
+              border-top: 1px solid #dde3e9;
+              &:hover {
+                  color: #ff5656;
+              }
+          }
+      }
+  }
+}
