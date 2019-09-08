@@ -8,16 +8,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import zh from '@angular/common/locales/zh';
-import { MyComponentComponent } from './my-component/my-component.component';
+import { QuillModule } from 'ngx-quill'
 
 registerLocaleData(zh);
 
 @NgModule({
    declarations: [
       AppComponent,
-      MyComponentComponent
    ],
    imports: [
       BrowserModule,
@@ -26,9 +24,9 @@ registerLocaleData(zh);
       FormsModule,
       HttpClientModule,
       BrowserAnimationsModule,
-      CKEditorModule
+      QuillModule.forRoot(),
    ],
-   entryComponents: [MyComponentComponent],
+   entryComponents: [],
    providers: [
    ],
    bootstrap: [

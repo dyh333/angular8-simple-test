@@ -1,2 +1,4 @@
-<button nz-button nzType="primary" (click)="openComponent()">open</button>&nbsp;
-    <button nz-button nzType="primary" (click)="closeComponent()">close</button>
+<h3 id="focusBlur">Default editor with height of 200px - focused: {{ focused }}, blured: {{ blured }}</h3>
+
+
+<quill-editor [styles]="{height: '200px'}" [modules]="modules" (onFocus)="focus($event)" (onContentChanged)="changedEditor($event)" (onBlur)="blur($event)" (onEditorCreated)="created($event)"></quill-editor>
