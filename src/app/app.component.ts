@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ResizedEvent } from 'angular-resize-event';
+import { PubSubService } from '@cmss/angular-pubsub';
 
 @Component({
   selector: 'app-root',
@@ -10,10 +10,11 @@ export class AppComponent {
   width: number;
   height: number;
 
-  onResized(event: ResizedEvent) {
-    this.width = event.newWidth;
-    this.height = event.newHeight;
+  constructor(private pubsub: PubSubService) {
 
-    console.log(this.width + ',' + this.height);
+  }
+
+  ontest() {
+    this.pubsub.$pub('pleaseCloseSidenav', {a: 1, b: 'ontest'});
   }
 }
