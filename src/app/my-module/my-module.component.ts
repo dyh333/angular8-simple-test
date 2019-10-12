@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PubSubService } from '@cmss/angular-pubsub';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-my-module',
@@ -7,15 +8,30 @@ import { PubSubService } from '@cmss/angular-pubsub';
   styleUrls: ['./my-module.component.css']
 })
 export class MyModuleComponent implements OnInit {
-  constructor(private pubSubService: PubSubService) {
-    this.pubSubService.$pub('pleaseCloseSidenav', 'helloIAmOverlay');
-  }
+  sub;
+  $sub: Observable<any>;
+  closeSidenavSub;
+
+  constructor(private pubSubService: PubSubService) {}
 
   ngOnInit() {
-   const sub = this.pubSubService.$sub('pleaseCloseSidenav').subscribe(from => {
-      console.log(from);
+    // console.log(this.$sub);
+    // console.log(this.$sub);
 
-      sub.unsubscribe();
+  //   this.closeSidenavSub = this.pubSubService.$sub('pleaseCloseSidenav').subscribe((from) => {
+  //     console.log(from);
+  // });
+
+    this.sub = this.pubSubService.$sub('pleaseCloseSidenav', from => {
+      console.log(from);
     });
+
+
+    // this.$sub = this.pubSubService.$sub('pleaseCloseSidenav');
+  }
+
+  ngOnDestroy(): void {
+    // this.sub.complete();
+    this.sub.unsubscribe();
   }
 }
