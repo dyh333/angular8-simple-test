@@ -237,6 +237,9 @@ export class AppComponent implements OnInit {
     root._id = node.id;
     try {
       const image = await this.createNodeImages(root);
+
+      console.log(image);
+
       node.image = image;
     } catch (e) {
       node.shape = 'dot';
@@ -335,10 +338,13 @@ export class AppComponent implements OnInit {
 
   async createNodeImages(data) {
     const image = await this.loadNodeImage(data);
+
     const base64 = {
       selected: this.createBase64Image(image, [60, 150, 255]),
       unselected: this.createBase64Image(image, [98, 104, 127])
     };
+
+    console.log(base64);
     return Promise.resolve(base64);
   }
 
