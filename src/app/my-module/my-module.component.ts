@@ -12,8 +12,10 @@ export class MyModuleComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pubSubService.$sub('pleaseCloseSidenav').subscribe(from => {
+   const sub = this.pubSubService.$sub('pleaseCloseSidenav').subscribe(from => {
       console.log(from);
+
+      sub.unsubscribe();
     });
   }
 }
