@@ -11,6 +11,7 @@ export class MyModuleComponent implements OnInit {
   sub;
   $sub: Observable<any>;
   closeSidenavSub;
+  obs;
 
   constructor(private pubSubService: PubSubService) {}
 
@@ -18,20 +19,31 @@ export class MyModuleComponent implements OnInit {
     // console.log(this.$sub);
     // console.log(this.$sub);
 
-  //   this.closeSidenavSub = this.pubSubService.$sub('pleaseCloseSidenav').subscribe((from) => {
-  //     console.log(from);
-  // });
+    this.obs = this.pubSubService.$sub('pleaseCloseSidenav');
 
-    this.sub = this.pubSubService.$sub('pleaseCloseSidenav', from => {
+
+    console.log(this.obs);
+
+    this.sub = this.obs.subscribe(from => {
       console.log(from);
     });
 
+    // this.sub = this.pubSubService.$sub('pleaseCloseSidenav', from => {
+    //   console.log(from);
+    // });
 
     // this.$sub = this.pubSubService.$sub('pleaseCloseSidenav');
   }
 
   ngOnDestroy(): void {
-    // this.sub.complete();
+    // console.log(this.obs.source._events);
+
+    // this.obs.source._events = [];
+
+
+
+    console.log(this.obs);
+
     this.sub.unsubscribe();
   }
 }
