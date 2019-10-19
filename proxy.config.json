@@ -1,0 +1,16 @@
+[
+  {
+    "context": ["/knowledge/api/v1/knowledge/bulk/output"],
+    "target": "http://10.139.15.64:9007",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  {
+    "context": ["/knowledge_template"],
+    "target": "http://10.139.15.64:9018",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+]

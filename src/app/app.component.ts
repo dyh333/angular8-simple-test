@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { ResizedEvent } from 'angular-resize-event';
+import { DomSanitizer } from '@angular/platform-browser';
+import * as fileSaver from 'file-saver';
+import { FileService } from './file.service';
 
 @Component({
   selector: 'app-root',
@@ -7,13 +9,18 @@ import { ResizedEvent } from 'angular-resize-event';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  width: number;
-  height: number;
+  title = 'Angular File Download';
 
-  onResized(event: ResizedEvent) {
-    this.width = event.newWidth;
-    this.height = event.newHeight;
+  constructor(private sanitizer: DomSanitizer, private fileService: FileService) {}
 
-    console.log(this.width + ',' + this.height);
+  download() {
+    this.fileService.downloadFile().subscribe(response => {
+      console.log(response);
+
+      // const blob = new Blob([response], { type: 'application/vnd.ms-excel' });
+
+      // fileSaver.saveAs(blob, 'filename');
+
+    });
   }
 }
