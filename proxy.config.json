@@ -1,6 +1,13 @@
 [
   {
-    "context": ["/knowledge/api/v1/knowledge/bulk/output"],
+    "context": ["/knowledge/api/v1/"],
+    "target": "http://10.139.15.64:9007",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  {
+    "context": ["/configman/api/v1/"],
     "target": "http://10.139.15.64:9007",
     "secure": false,
     "logLevel": "debug",

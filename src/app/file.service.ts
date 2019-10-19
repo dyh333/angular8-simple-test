@@ -37,13 +37,19 @@ export class FileService {
     headers.set('Content-Type', 'application/ms-excel');
 
     return this.http
-      .get('/knowledge_template', {
+      .get('/configman/api/v1/importtemplate/user123', {
         headers,
+        observe: 'response',
         responseType: 'blob'
       })
       .pipe(
         map(res => {
-          this.fileSaver(res, 'xxx');
+          console.log(res);
+
+          const contentDisposition = res.headers.get('content-disposition');
+          const filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
+          console.log(filename);
+          this.fileSaver(res.body, filename);
 
           return 111;
         })

@@ -14,7 +14,7 @@ export class AppComponent {
   constructor(private sanitizer: DomSanitizer, private fileService: FileService) {}
 
   download() {
-    this.fileService.downloadFile().subscribe(response => {
+    this.fileService.downloadFile2().subscribe(response => {
       console.log(response);
 
       // const blob = new Blob([response], { type: 'application/vnd.ms-excel' });
